@@ -1,3 +1,18 @@
 
 class Pins(object):
     NUCLEO_BLUE_BUTTON = 'C13'
+    
+    MOTOR1_DIRECTION = 'D4'
+    MOTOR1_PWM = 'D5'
+    MOTOR1_ENC_A = 'D0'
+    MOTOR1_ENC_B = 'D1'
+
+    MOTOR2_DIRECTION = 'D7'
+    MOTOR2_PWM = 'D6'
+    MOTOR2_ENC_A = 'D11'
+    MOTOR2_ENC_B = 'D12'
+
+    MOTOR3_DIRECTION = 'D2'
+    MOTOR3_PWM = 'D3'
+    MOTOR3_ENC_A = 'D13'
+    MOTOR3_ENC_B = 'D23'
