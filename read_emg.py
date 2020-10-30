@@ -17,10 +17,11 @@ class ReadEmg(object):
         adc=machine.READ(pin) #reads the pin defined when calling this function, 0<adc<1024 for 0<voltage<3.3
         reads += 1
         print(reads,",",adc)
-        dataset = dataset.append(adc)
+        dataset.append(adc)
         return
 
     def run(self):
+        print("running")
         t1 = br_timer(5,700,observe)
         for(reads = 0):
             print("t1start")
