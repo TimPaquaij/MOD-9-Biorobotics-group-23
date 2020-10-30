@@ -1,3 +1,77 @@
+from states import States
+from state_object import StateObject
+from state_functions import StateFunctions
+
+from nucleo_button_control import NucleoButtonControl
+
+import br_timer
+
+class Robot(object):
+    
+    def __init__(self, timer_number, main_frequency):
+        
+        self.main_frequency = main_frequency
+        self.main_ticker = br_timer.ticker(timer_number, main_frequency, self.run, True)
+
+        # State object instance that can be updated by other objects
+        self.state_object = StateObject()
+
+        # Objects that can update the state object
+        self.nucleo_button_control = NucleoButtonControl(self.state_object)
+        self.state_functions = StateFunctions(self.state_object)
+        
+        # The state machine itself
+        self.state_machine = {
+            States.CALIBRATION: self.state_functions.calibration,
+            States.MOVE: self.state_functions.move,
+        }
+
+        return
+
+
+    def run(self):
+        """
+        Target for the ticker. Get's executed every time step.
+        """
+
+        # Check if the button was invoked for a state update
+        self.nucleo_button_control.update_state()
+
+        # Run the active state from the state machine
+        self.state_machine[self.state_object.state]()
+        return
+
+
+    def start(self):
+        # Ticker start
+        self.main_ticker.start()
+        return
+
+
+    def stop(self):
+        # Ticker stop
+        self.main_ticker.stop()
+        return
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 #All states
 
