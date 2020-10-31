@@ -96,37 +96,6 @@ class Calibrate(object):
         self.mean_stressed2 = sum(self.dataset_2)/len(self.dataset_2)
         self.mean_stressed3 = sum(self.dataset_3)/len(self.dataset_3)
         print("done")
-
-
-    
-        
-        """print("waiting for button press(stressed)")
-        while self.state == False:
-            self.state = self.button_control.button_state_change()
-        'when pressed'
-        self.state = False
-        'run agian'
-        print("start stressed calibrating...")
-
-        self.emg_calibrate.run()
-        print("calculating...")
-        
-        'Haal data set uit emgreader'
-        self.dataset_1 = self.emg_calibrate.datareceive1()
-        self.dataset_2 = self.emg_calibrate.datareceive2()
-        self.dataset_3 = self.emg_calibrate.datareceive3()
-
-        'berekend de mean van alles 3 de dataset appart'
-
-        self.dataset_filterd1 = self.filter(self.dataset_1)
-        self.dataset_filterd2 = self.filter(self.dataset_2)
-        self.dataset_filterd3 = self.filter(self.dataset_3)
-
-        self.mean_stressed1 = sum(self.dataset_filterd1)/len(self.dataset_filterd1)
-        self.mean_stressed2 = sum(self.dataset_filterd2)/len(self.dataset_filterd2)
-        self.mean_stressed3 = sum(self.dataset_filterd3)/len(self.dataset_filterd3)
-        'stuur emg mean value stressed and unsressed away'
-        """
     
         return (self.mean_stressed1, self.mean_stressed2, self.mean_stressed3, self.mean_unstressed1, self.mean_unstressed2, self.mean_unstressed3)
 
