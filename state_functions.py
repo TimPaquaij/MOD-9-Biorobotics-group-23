@@ -42,6 +42,13 @@ class StateFunctions(object):
             self.EMG_ticker.start()
 
         # Action
+
+        #EMG readout
+        self.running_all.bicep_left = 1
+        self.running_all.bicep_right = 1
+        self.running_all.calve = 0
+
+        #Motor control
         self.running_all.run_all()
 
         # State guards

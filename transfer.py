@@ -12,8 +12,8 @@ class Transfer(object):
     def transfering(self, bicep_left, bicep_right, calve):
         solver = EMG_States(bicep_left,bicep_right,calve)
         out = solver.move()
-        print(out)
-        return self.angles.go_moving(out)
+        self.angles.go_moving(out)
+        return 
 
 '''
 test = Transfer()

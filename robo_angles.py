@@ -19,27 +19,27 @@ class Angles (object):
 
     def go_moving(self,amount):
         if abs(amount) == 1:
-            self.go_horizontal(amount)
+            self.go_horizontal(amount/1)
         elif abs(amount) == 2:
             self.go_vertical(amount/2)
-        else:
-            self.change = np.array([0,0,0])
-            self.dMotoAng = self.lastMotoang
-        print(self.dMotoAng)
-        print(self.change)
-        return self.change
+        
+            #self.change = np.array([0,0,0])
+            #self.dMotoAng = self.lastMotoang
+        #print(self.dMotoAng)
+        #print(self.change)
+        return
 
     def go_vertical(self, amount):
         self.psiEE0[1] += amount
         self.change = self.calc_moto_angle_change()
-        self.lastMotoang = self.dMotoAng
+        #self.lastMotoang = self.dMotoAng
         return
 
 
     def go_horizontal(self, amount):
         self.psiEE0[0] += amount
         self.change = self.calc_moto_angle_change()
-        self.lastMotoang = self.dMotoAng
+        #self.lastMotoang = self.dMotoAng
         return
     
 

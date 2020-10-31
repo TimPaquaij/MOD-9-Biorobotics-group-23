@@ -21,7 +21,6 @@ class Running(object):
         self.PID = PID_pf(1 / motor_freq, 200, 10, 15)
         self.unwrapper = Unwrapper(8400)
         self.reference = 0
-        self.tic = 0
 
         return
 
@@ -43,9 +42,8 @@ class Running(object):
         self.Motor.pulse_width_percent(duty_cycle)
         return
 
-    def ref(self):
-        self.reference = 1050*math.sin((2*3.1415*self.tic)/100)
-        self.tic = self.tic + 1
+    def ref(self, change):
+        self.reference = 8400*change/(2*3.1415)
         return
 
 
@@ -54,6 +52,11 @@ class RunningAll(object):
         self.Motor3 = Running(3)
         self.Motor2 = Running(2)
         self.Motor1 = Running(1)
+        self.trans = Transfer()
+        self.bicep_left = 0
+        self.bicep_right = 0
+        self.calve = 0
+
         return
     
     def run_all(self):
@@ -63,9 +66,11 @@ class RunningAll(object):
         return
 
     def ref_all(self):
-        self.Motor3.ref()
-        self.Motor2.ref()
-        self.Motor1.ref()
+        self.trans.transfering(self.bicep_left, self.bicep_right, self.calve)
+        
+        self.Motor3.ref(self.trans.angles.change[2])
+        self.Motor2.ref(self.trans.angles.change[1])
+        self.Motor1.ref(self.trans.angles.change[0])
         return
 
 
