@@ -4,6 +4,8 @@ from state_functions import StateFunctions
 
 from nucleo_button_control import NucleoButtonControl
 
+import utime
+
 import br_timer
 
 class Robot(object):
@@ -11,7 +13,7 @@ class Robot(object):
     def __init__(self, timer_number, main_frequency):
         
         self.main_frequency = main_frequency
-        self.main_ticker = br_timer.ticker(timer_number, main_frequency, self.run, True)
+        self.main_ticker = br_timer.ticker(timer_number, main_frequency, self.run, GC=True)
 
         # State object instance that can be updated by other objects
         self.state_object = StateObject()

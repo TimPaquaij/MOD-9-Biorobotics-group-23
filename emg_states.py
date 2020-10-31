@@ -24,8 +24,16 @@ class EMG_States(object):
         return output
     
     def stationary(self):
-        if not any([self.bicep_left, self.bicep_right, self.calve]):
+        if not any([self.bicep_left, self.bicep_right, self.calve]) or all([self.bicep_left, self.bicep_right, self.calve]):
             stationary = True
+            print('stationary')
+        elif not (self.bicep_left) and (self.bicep_right) and (self.calve):
+            stationary = True
+            self.click_right = True
+            print('stationary')
+        elif (self.bicep_left) and not (self.bicep_right) and (self.calve):
+            stationary = True
+            self.click_left = True
             print('stationary')
         else:
             stationary = False

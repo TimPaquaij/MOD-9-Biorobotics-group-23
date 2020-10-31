@@ -18,7 +18,7 @@ class Running(object):
         encoder_period = 8400
         self.motor = motor
         self.Motor = Motor(motor_freq,encoder_period,motor)
-        self.PID = PID_pf(1 / motor_freq, 200, 10, 15)
+        self.PID = PID_pf(1 / motor_freq, 200, 50, 1.5)
         self.unwrapper = Unwrapper(8400)
         self.reference = 0
 
@@ -35,11 +35,11 @@ class Running(object):
                 (control_output < 0 and self.Motor.direction_pin.value())):
             self.Motor.reverse()
 
-        duty_cycle = abs(control_output) * 100 / (self.PID.p_gain *2100)
+        duty_cycle = abs(control_output) * 100 / (self.PID.p_gain*500)
         if duty_cycle > 100:
             duty_cycle = 100
-        if self.motor == 1:
-            print(self.motor,';',self.reference,';',measured,';',control_output,';',duty_cycle)
+        
+        print(self.motor,';',self.reference,';',measured,';',control_output,';',duty_cycle)
         self.Motor.pulse_width_percent(duty_cycle)
         return
 
