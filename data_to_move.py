@@ -6,13 +6,15 @@ class DataToMove(object):
 
     def __init__(self):
         readtime = 0.1
-        self.emg_read = EmgRun(readtime, 15)
+        self.emg_reader1 = EmgRun(readtime, 1,12)
+        self.emg_reader2 = EmgRun(readtime, 2,13)
+        self.emg_reader3 = EmgRun(readtime, 3,14)
+
+        self.checkdone = False
         self.filter = FilterSetup()
         
 
         self.dataset_1 = []
-        self.dataset_2 = []
-        self.dataset_3 = []
 
         self.mean1 = 0 
         self.mean2 = 0
@@ -38,20 +40,51 @@ class DataToMove(object):
 
 
     def run(self):
+        self.emg_reader1.run()
+        
+        """while self.checkdone == False:
+            self.checkdone = self.emg_reader1.checkdone()
+        self.checkdone = False"""
 
-        self.emg_read.run()
-        
-        self.dataset_1 = self.emg_read.datareceive1()
-        self.dataset_2 = self.emg_read.datareceive2()
-        self.dataset_3 = self.emg_read.datareceive3()
-        
+        print("calculating1")
+        self.dataset_1 = self.emg_reader1.datareceive()
         self.dataset_1 = self.filter.run(self.dataset_1)
-        self.dataset_2 = self.filter.run(self.dataset_2)
-        self.dataset_3 = self.filter.run(self.dataset_3)
-
         self.mean1 = sum(self.dataset_1)/len(self.dataset_1)
-        self.mean2 = sum(self.dataset_2)/len(self.dataset_2)
-        self.mean3 = sum(self.dataset_3)/len(self.dataset_3)
+        
+
+
+
+        print("reading2")
+        self.emg_reader2.run()
+
+        """while self.checkdone == False:
+            self.checkdone = self.emg_reader2.checkdone()
+        self.checkdone = False"""
+        
+        print("calculating2")
+        self.dataset_1 = self.emg_reader2.datareceive()
+        print("received")
+        self.dataset_1 = self.filter.run(self.dataset_1)
+        print("filtered")
+        self.mean2 = sum(self.dataset_1)/len(self.dataset_1)
+        print("mean calculated")
+        
+
+
+
+        print("reading3")
+        self.emg_reader3.run()
+        
+        """while self.checkdone == False:
+            self.checkdone = self.emg_reader3.checkdone()
+        self.checkdone = False"""
+
+        print("calculating3")
+        self.dataset_1 = self.emg_reader3.datareceive()
+        self.dataset_1 = self.filter.run(self.dataset_1)
+        self.mean3 = sum(self.dataset_1)/len(self.dataset_1)
+        self.dataset_1 = []
+
 
         self.threshold1 = 0.8*(self.mean_stressed1-self.mean_unstressed1)+ self.mean_unstressed1
         self.threshold2 = 0.8*(self.mean_stressed2-self.mean_unstressed2)+ self.mean_unstressed2 
