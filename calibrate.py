@@ -6,7 +6,7 @@ class Calibrate(object):
 
     def __init__(self):
         readtime = 0.1
-        self.emg_calibrate = EmgRun(readtime)
+        self.emg_calibrate = EmgRun(readtime, 12)
         self.button_control = CalButtonControl()
         self.filter = FilterSetup()
         self.state = False

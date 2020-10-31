@@ -3,8 +3,6 @@ from state_object import StateObject
 from state_functions import StateFunctions
 from calibrate import Calibrate
 
-from nucleo_button_control import NucleoButtonControl
-
 import br_timer
 
 class Robot(object):
@@ -18,7 +16,6 @@ class Robot(object):
         self.state_object = StateObject()
 
         # Objects that can update the state object
-        self.nucleo_button_control = NucleoButtonControl(self.state_object)
         self.state_functions = StateFunctions(self.state_object)
         
         # The state machine itself
@@ -39,7 +36,6 @@ class Robot(object):
         """
 
         # Check if the button was invoked for a state update
-        self.nucleo_button_control.update_state()
         print("state updated")
 
         # Run the active state from the state machine
@@ -61,6 +57,8 @@ class Robot(object):
 
     def calibr(self):
             self.a=self.calibration.run()
+            self.state_object.set_state(States.MOVE)
+            print("entered state move")
 
         
 

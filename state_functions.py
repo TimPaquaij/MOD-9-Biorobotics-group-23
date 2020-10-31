@@ -1,5 +1,7 @@
 #import all the classes we need for the state functions
-from calibrate import Calibrate
+from data_to_move import DataToMove
+from states import States
+
 
 class StateFunctions(object):
 
@@ -8,11 +10,12 @@ class StateFunctions(object):
         self.state_object = state_object
 
         #initialize all the needed classes and variables
+        self.datatomove = DataToMove()
       
         return
 
 
-    def calibration(self):
+    def calibration(self): # not used
         # Entry action
         if self.state_object.is_new_state():
             print('Entered CALIBRATION')
@@ -30,6 +33,7 @@ class StateFunctions(object):
             print('Entered MOVE')
 
         # Action
+        self.muscledata = self.datatomove.run()
         
         # State guards
         # None: performed by the button press

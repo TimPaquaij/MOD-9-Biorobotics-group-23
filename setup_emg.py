@@ -4,8 +4,8 @@ from machine import Pin, ADC
 from emg_read import EmgReader
 
 class EmgRun(object):
-    def __init__(self, readtime):
-        self.ticker_number = 15
+    def __init__(self, readtime, ticker):
+        self.ticker_number = ticker
 
         self.EmgReader1 = EmgReader(1)
         self.EmgReader2 = EmgReader(2)
