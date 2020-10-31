@@ -5,6 +5,7 @@ class Timers(object):
     #Timers that are already taken: 1, 2, 3, 4, 7
    
     RUN = 7
+    CHANGE_EMG = 15
 
     MOTOR1_PWM = 1
     MOTOR1_PWM_CHANNEL = 2

@@ -1,5 +1,5 @@
 import utime
-from motor2 import Motor
+from motor import Motor
 from pid_controller import PID_pf
 import br_timer
 from timer_definitions import Timers
@@ -22,6 +22,7 @@ class Running(object):
         self.unwrapper = Unwrapper(8400)
         self.reference = 0
         self.tic = 0
+
         return
 
     def run(self):
@@ -68,12 +69,14 @@ class RunningAll(object):
         return
 
 
+
+'''
 main_frequency = 50
 EMG_frequency = 1
 
 test = RunningAll()
 
-utime.sleep(5)
+
 
 EMG_ticker = br_timer.ticker(Timers.CHANGE_EMG, EMG_frequency, test.ref_all)
 EMG_ticker.start()
@@ -85,6 +88,6 @@ utime.sleep(50)
 
 EMG_ticker.stop()
 main_ticker.stop()
-
+'''
 
 

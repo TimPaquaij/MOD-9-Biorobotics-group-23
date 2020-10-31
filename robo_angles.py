@@ -14,6 +14,7 @@ class Angles (object):
         self.dMotoAng = np.array([1.29239258, 3.3867875, -0.80200278])
 
         self.lastMotoang = self.dMotoAng
+        self.change = np.array([0,0,0])
         return
 
     def go_moving(self,amount):
