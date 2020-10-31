@@ -8,8 +8,6 @@ class StateFunctions(object):
         self.state_object = state_object
 
         #initialize all the needed classes and variables
-        self.calibration=Calibrate()
-        self.a = []
       
         return
 
@@ -18,7 +16,6 @@ class StateFunctions(object):
         # Entry action
         if self.state_object.is_new_state():
             print('Entered CALIBRATION')
-            self.a=self.calibration.run()
 
         # Action
         

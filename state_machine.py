@@ -1,6 +1,7 @@
 from states import States
 from state_object import StateObject
 from state_functions import StateFunctions
+from calibrate import Calibrate
 
 from nucleo_button_control import NucleoButtonControl
 
@@ -26,6 +27,9 @@ class Robot(object):
             States.MOVE: self.state_functions.move,
         }
 
+        #initialize all the needed classes and variables
+        self.calibration=Calibrate()
+
         return
 
 
@@ -36,9 +40,11 @@ class Robot(object):
 
         # Check if the button was invoked for a state update
         self.nucleo_button_control.update_state()
+        print("state updated")
 
         # Run the active state from the state machine
         self.state_machine[self.state_object.state]()
+        print("state done")
         return
 
 
@@ -52,6 +58,11 @@ class Robot(object):
         # Ticker stop
         self.main_ticker.stop()
         return
+
+    def calibr(self):
+            self.a=self.calibration.run()
+
+        
 
 
 
