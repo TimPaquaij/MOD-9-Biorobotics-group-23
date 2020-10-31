@@ -2,7 +2,7 @@
 from machine import Pin
 
 
-class ButtonControl(object):
+class CalButtonControl(object):
 
     def __init__(self):
         self.is_pressed = False
