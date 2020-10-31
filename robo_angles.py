@@ -30,14 +30,17 @@ class Angles (object):
         return
 
     def go_vertical(self, amount):
-        self.psiEE0[1] += amount
+        if math.sqrt((self.psiEE0[1] + amount)**2 + self.psiEE0[0]**2) < 50:
+            self.psiEE0[1] += amount
         self.change = self.calc_moto_angle_change()
         #self.lastMotoang = self.dMotoAng
         return
 
 
     def go_horizontal(self, amount):
-        self.psiEE0[0] += amount
+        if math.sqrt((self.psiEE0[0] + amount)**2 + self.psiEE0[1]**2) < 50:
+            self.psiEE0[0] += amount
+
         self.change = self.calc_moto_angle_change()
         #self.lastMotoang = self.dMotoAng
         return
