@@ -5,7 +5,8 @@ class StateObject(object):
 
     def __init__(self):
         self.last_state = None
-        self.state = States.CALIBRATION
+        self.state = States.STANDSTILL
+    
         return
 
 

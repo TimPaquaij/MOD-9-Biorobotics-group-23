@@ -22,8 +22,15 @@ class Robot(object):
         
         # The state machine itself
         self.state_machine = {
-            States.CALIBRATION: self.state_functions.calibration,
-            States.MOVE: self.state_functions.move,
+            States.STANDSTILL: self.state_functions.standstill, 
+            States.CALIUNSTRESSEDLEFT: self.state_functions.caliunstressedleft,
+            States.CALISTRESSEDLEFT: self.state_functions.calistressedleft, 
+            States.CALIUNSTRESSEDRIGHT: self.state_functions.caliunstressedright, 
+            States.CALISTRESSEDRIGHT: self.state_functions.calistressedright, 
+            States.CALIUNSTRESSEDCALF: self.state_functions.caliunstressedcalf,
+            States.CALISTRESSEDCALF: self.state_functions.calistressedcalf, 
+            States.READEMG: self.state_functions.read_emg,
+            States.MOVE: self.state_functions.move
         }
 
         return

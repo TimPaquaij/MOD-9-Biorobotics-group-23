@@ -33,10 +33,26 @@ class NucleoButtonControl(object):
         if self.is_pressed:
             self.is_pressed = False
 
-            if self.state_object.state is States.CALIBRATION:
+            if self.state_object.state is States.STANDSTILL:
+                self.state_object.set_state(States.CALIUNSTRESSEDLEFT)
+            elif self.state_object.state is States.CALIUNSTRESSEDLEFT:
+                self.state_object.set_state(States.CALISTRESSEDLEFT)
+            elif self.state_object.state is States.CALISTRESSEDLEFT:
+                self.state_object.set_state(States.CALIUNSTRESSEDRIGHT)
+            elif self.state_object.state is States.CALIUNSTRESSEDRIGHT:
+                self.state_object.set_state(States.CALISTRESSEDRIGHT)
+            elif self.state_object.state is States.CALISTRESSEDRIGHT:
+                self.state_object.set_state(States.CALIUNSTRESSEDCALF)
+            elif self.state_object.state is States.CALIUNSTRESSEDCALF:
+                self.state_object.set_state(States.CALISTRESSEDCALF)
+            elif self.state_object.state is States.CALISTRESSEDCALF:
+                self.state_object.set_state(States.READEMG)
+            elif self.state_object.state is States.READEMG:
                 self.state_object.set_state(States.MOVE)
-            elif self.state_object.state is States.MOVE:
-                self.state_object.set_state(States.CALIBRATION)
+
+
+
+
 
         return
 
