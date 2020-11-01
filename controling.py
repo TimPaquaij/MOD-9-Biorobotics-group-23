@@ -8,6 +8,8 @@ from transfer import Transfer
 import ulab as np
 from unwrapper import Unwrapper
 import math
+
+from servo_control import ServoControl
     
 
 
@@ -38,8 +40,8 @@ class Running(object):
         duty_cycle = abs(control_output) * 100 / (self.PID.p_gain*500)
         if duty_cycle > 100:
             duty_cycle = 100
-        if self.motor == 3:
-            print(self.motor,';',self.reference,';',measured,';',control_output,';',duty_cycle)
+        #if self.motor == 3:
+            #print(self.motor,';',self.reference,';',measured,';',control_output,';',duty_cycle)
         self.Motor.pulse_width_percent(duty_cycle)
         return
 
@@ -54,12 +56,12 @@ class RunningAll(object):
         self.Motor2 = Running(2)
         self.Motor1 = Running(1)
 
-        #self.Servo = Servo()#new
+        self.Servo = ServoControl()#new
 
         self.trans = Transfer()
-        self.bicep_left = 0
-        self.bicep_right = 0
-        self.calve = 0
+        #self.bicep_left = 0
+        #self.bicep_right = 0
+        #self.calve = 0
 
         return
     
@@ -70,22 +72,28 @@ class RunningAll(object):
         return
 
     def ref_all(self):
-        self.trans.transfering(self.bicep_left, self.bicep_right, self.calve)
+        self.trans.transfering(self.trans.emg_states.bicep_left, self.trans.emg_states.bicep_right, self.trans.emg_states.calve)
         
         self.Motor3.ref(self.trans.angles.change[2])
         self.Motor2.ref(self.trans.angles.change[1])
         self.Motor1.ref(self.trans.angles.change[0])
-        '''
+        
         if self.trans.emg_states.click_right:#new
+            self.Servo.rest()
             self.Servo.right()
+            utime.sleep(0.1)
+            self.Servo.rest()
             #rigth click function
             return
 
         elif self.trans.emg_states.click_left:#new
+            self.Servo.rest()
             self.Servo.left()
+            utime.sleep(0.1)
+            self.Servo.rest()
             #left click function
             return
-        '''
+        
         return
 
 

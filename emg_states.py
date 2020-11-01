@@ -1,8 +1,8 @@
 class EMG_States(object):
-    def __init__(self, bicep_left, bicep_right, calve):
-        self.bicep_left = bicep_left
-        self.bicep_right = bicep_right
-        self.calve = calve
+    def __init__(self):
+        self.bicep_left = False
+        self.bicep_right = False
+        self.calve = False
 
         self.click_right = False
         self.click_left = False
@@ -13,7 +13,7 @@ class EMG_States(object):
         change_position = [0, 0, 0, 0, 0]
         multiply = [1, -1, 2, 1, -2]
         for i in range(len(position)):
-            change_position[i] += position[i] * multiply[i]
+            change_position[i] = position[i] * multiply[i]
 
         if change_position[0] == 1:
             output = 0
@@ -27,11 +27,11 @@ class EMG_States(object):
         if not any([self.bicep_left, self.bicep_right, self.calve]) or all([self.bicep_left, self.bicep_right, self.calve]):
             stationary = True
             print('stationary')
-        elif not (self.bicep_left) and (self.bicep_right) and (self.calve):
+        elif (self.bicep_right and self.calve) and not (self.bicep_left):
             stationary = True
             self.click_right = True
             print('stationary')
-        elif (self.bicep_left) and not (self.bicep_right) and (self.calve):
+        elif self.bicep_left and self.calve and not self.bicep_right:
             stationary = True
             self.click_left = True
             print('stationary')
@@ -64,9 +64,10 @@ class EMG_States(object):
         return move_right
 
     def moving_down(self):
-        if self.calve and not any([self.bicep_left, self.bicep_right]):
+        if self.calve and not self.bicep_left and not self.bicep_right:
             move_down = True
             print('down')
         else: 
             move_down = False
         return move_down
+

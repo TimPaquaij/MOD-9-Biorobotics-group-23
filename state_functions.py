@@ -10,13 +10,11 @@ class StateFunctions(object):
         
         self.state_object = state_object
 
-        #transfer stuff
-        #self.transfering = Transfer
-
+    
         #motor controll stuff
         self.running_all = RunningAll()
-        self.EMG_frequency = 20
-
+        self.EMG_frequency = 0.08
+        self.EMG_ticker = br_timer.ticker(Timers.CHANGE_EMG, self.EMG_frequency, self.running_all.ref_all)
         #initialize all the needed classes and variables
       
         return
@@ -26,6 +24,7 @@ class StateFunctions(object):
         # Entry action
         if self.state_object.is_new_state():
             print('Entered CALIBRATION')
+            
 
         # Action
         
@@ -38,15 +37,14 @@ class StateFunctions(object):
         # Entry action
         if self.state_object.is_new_state():
             print('Entered MOVE')
-            self.EMG_ticker = br_timer.ticker(Timers.CHANGE_EMG, self.EMG_frequency, self.running_all.ref_all)
             self.EMG_ticker.start()
 
         # Action
 
         #EMG readout
-        self.running_all.bicep_left = 0
-        self.running_all.bicep_right = 1
-        self.running_all.calve = 0
+        self.running_all.trans.emg_states.bicep_left = False
+        self.running_all.trans.emg_states.bicep_right = True
+        self.running_all.trans.emg_states.calve = True
 
         #Motor control
         self.running_all.run_all()
