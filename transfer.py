@@ -7,10 +7,11 @@ class Transfer(object):
 
     def __init__(self):
         self.angles = Angles()
+        self.emg_states = EMG_States(0,0,0)#new
         return
 
     def transfering(self, bicep_left, bicep_right, calve):
-        solver = EMG_States(bicep_left,bicep_right,calve)
+        solver = self.emg_states(bicep_left,bicep_right,calve)#new
         out = solver.move()
         self.angles.go_moving(out)
         return 

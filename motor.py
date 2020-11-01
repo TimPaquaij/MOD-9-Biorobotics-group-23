@@ -63,6 +63,7 @@ class Motor(object):
             self.timer_enc.channel(
                 Timers.MOTOR3_ENC_B_CHANNEL, Timer.ENC_AB, pin=pin_b)
 
+
         return
 
 

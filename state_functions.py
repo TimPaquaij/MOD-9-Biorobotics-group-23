@@ -15,7 +15,7 @@ class StateFunctions(object):
 
         #motor controll stuff
         self.running_all = RunningAll()
-        self.EMG_frequency = 1
+        self.EMG_frequency = 20
 
         #initialize all the needed classes and variables
       
@@ -44,7 +44,7 @@ class StateFunctions(object):
         # Action
 
         #EMG readout
-        self.running_all.bicep_left = 1
+        self.running_all.bicep_left = 0
         self.running_all.bicep_right = 1
         self.running_all.calve = 0
 

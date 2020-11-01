@@ -38,8 +38,8 @@ class Running(object):
         duty_cycle = abs(control_output) * 100 / (self.PID.p_gain*500)
         if duty_cycle > 100:
             duty_cycle = 100
-        
-        print(self.motor,';',self.reference,';',measured,';',control_output,';',duty_cycle)
+        if self.motor == 3:
+            print(self.motor,';',self.reference,';',measured,';',control_output,';',duty_cycle)
         self.Motor.pulse_width_percent(duty_cycle)
         return
 
@@ -53,6 +53,9 @@ class RunningAll(object):
         self.Motor3 = Running(3)
         self.Motor2 = Running(2)
         self.Motor1 = Running(1)
+
+        #self.Servo = Servo()#new
+
         self.trans = Transfer()
         self.bicep_left = 0
         self.bicep_right = 0
@@ -72,6 +75,17 @@ class RunningAll(object):
         self.Motor3.ref(self.trans.angles.change[2])
         self.Motor2.ref(self.trans.angles.change[1])
         self.Motor1.ref(self.trans.angles.change[0])
+        '''
+        if self.trans.emg_states.click_right:#new
+            self.Servo.right()
+            #rigth click function
+            return
+
+        elif self.trans.emg_states.click_left:#new
+            self.Servo.left()
+            #left click function
+            return
+        '''
         return
 
 
