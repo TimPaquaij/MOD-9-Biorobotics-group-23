@@ -16,3 +16,5 @@ class Pins(object):
     MOTOR3_PWM = 'D3'
     MOTOR3_ENC_A = 'D13'
     MOTOR3_ENC_B = 'D23'
+
+    SERVO_PWM = 'D63'

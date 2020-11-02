@@ -27,3 +27,6 @@ class Timers(object):
     MOTOR3_ENC = 2
     MOTOR3_ENC_A_CHANNEL = 1
     MOTOR3_ENC_B_CHANNEL = 2
+
+    SERVO_PWM = 14
+    SERVO_PWM_CHANNEL = 1
