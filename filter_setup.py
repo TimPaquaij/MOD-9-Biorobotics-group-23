@@ -3,13 +3,13 @@ from filter import Filter
 
 class FilterSetup(object):
     def __init__(self):
-        self.sample_frequency = 700
+        self.sample_frequency = 400
 
         self.Adata= []
         self.Normdata = []
 
-        self.Notchdata = []
-        self.Highdata = []
+        self.Ndata = []
+        self.Hdata = []
         self.Absdata = []
         #self.Ydata = []
 
@@ -17,29 +17,29 @@ class FilterSetup(object):
         Notch filter
         """
         na0 = 1.0
-        na1 = -1.7905
-        na2 = 0.9873
-        nb0 = 0.9936
-        nb1 = -1.7905
-        nb2 = 0.9936
+        na1 = -1.3985
+        na2 = 0.9778
+        nb0 = 0.9889
+        nb1 = -1.3985
+        nb2 = 0.9889
         """
         High-Pass filter
         """
         ha0 = 1.0
-        ha1 = -1.2084
-        ha2 = 0.4722
-        hb0 = 0.6549
-        hb1 = -1.3098
-        hb2 = 0.6549
+        ha1 = -1.8696
+        ha2 = 0.8794
+        hb0 = 0.9159
+        hb1 = -1.8318
+        hb2 = 0.9159
         """
         Low-Pass filter
         """
         la0 = 1.0
-        la1 = -1.8240
-        la2 = 0.8414
-        lb0 = 0.0043
-        lb1 = 0.0085
-        lb2 = 0.0043
+        la1 = 0.5136
+        la2 = 0.2706
+        lb0 = 0.4359
+        lb1 = 0.8718
+        lb2 = 0.4359
 
 
         """
@@ -53,34 +53,27 @@ class FilterSetup(object):
     
     def run(self, data):
         self.data=data
-        self.mean_data = sum(self.data)/len(self.data)
 
         self.meanandnormalize()
 
-        self.data=self.NotchFilter.filter(self.sample_frequency, self.data)
-        self.data=self.HighPassFilter.filter(self.sample_frequency, self.data)
-        
+        self.Ndata=self.NotchFilter.filter(self.sample_frequency, self.Adata)
+        self.Hdata=self.HighPassFilter.filter(self.sample_frequency, self.Ndata)
+
         self.Adata = []
 
-        for num in self.data:
+        for num in self.Hdata:
             abso = abs(num)
-            self.Adata.append(abso)
-        self.data=self.LowPassFilter.filter(self.sample_frequency, self.Adata)
-        return(self.data)
+            self.Absdata.append(abso)
+        self.Ldata=self.LowPassFilter.filter(self.sample_frequency, self.Absdata)
+        return(self.Ldata)
 
     def meanandnormalize(self):
-        print("mean...")
-        for num in self.data:
-            n_unit_data = num-(self.mean_data)
-            self.Adata.append(n_unit_data)
 
-        max_data = max(self.Adata)
-        self.data = []
         print("normalize...")
 
-        for num in self.Adata:
-            unit = num/max_data
-            self.data.append(unit)
+        for num in self.data:
+            unit = num/65535
+            self.Adata.append(unit)
         return
 
 
