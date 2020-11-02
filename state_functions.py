@@ -1,7 +1,7 @@
 #import all the classes we need for the state functions
 
 #necessary for emg
-from setup_emg import EmgRun
+from emg_read import EmgReader
 from filter_setup import FilterSetup
 import utime
 
@@ -15,17 +15,26 @@ class StateFunctions(object):
     
 
         #set up emg
-        self.cali_read_time = 0.1
-        self.clEmg = EmgRun(self.cali_read_time, 1, 12)  #Calibrate  Left
-        self.crEmg = EmgRun(self.cali_read_time, 2, 12)  #Calibrate  right
-        self.ccEmg = EmgRun(self.cali_read_time, 3, 12)  #Calibrate  Calf
+        self.clEmg = EmgReader(1)  #Calibrate  Left
+        self.crEmg = EmgReader(2)  #Calibrate  right
+        self.ccEmg = EmgReader(3)  #Calibrate  Cal
 
-        self.temp_dataset = []
-        self.checkdone = False
+        self.readdata = 0
+        self.storage = [0,0,0,0,0,0,0,0,0,0]
+
+        self.count = 0
 
         
         #set up filters
         self.filter_it = FilterSetup()
+
+        self.mean_unstressed1 = 0 #left
+        self.mean_unstressed2 = 0 #right
+        self.mean_unstressed3 = 0 #calf
+
+        self.mean_stressed1 = 0
+        self.mean_stressed2 = 0
+        self.mean_stressed3 = 0
 
 
         return
@@ -39,26 +48,33 @@ class StateFunctions(object):
         # Entry action 
         if self.state_object.is_new_state():
             print('Entered CALIUNSTRESSEDLEFT')
-            self.clEmg.start()
+            print("start counting")
+            self.count = 0
 
-            while self.checkdone == False: #wait for read emg to finish
-                self.checkdone = self.clEmg.checkdone()
-            self.checkdone = False
-
-            #maybe a sleep
-            print("sleep")
-            #utime.sleep(1)
-            print("^almost at return^")
-
-            self.temp_dataset = self.clEmg.datareceive()
-            print("data received")
-
-            self.temp_dataset = self.filter_it.run(self.temp_dataset)
-            print("data filtered")
-            print("length of the data =:", len(self.temp_dataset))
-            self.mean_unstressed1 = sum(self.temp_dataset)/len(self.temp_dataset)
         # Action
-        
+        if self.count < 3:
+            self.readdata = self.clEmg.read_emg() #read the analog pin
+
+            self.storage[9] = self.storage[8]
+            self.storage[8] = self.storage[7]
+            self.storage[7] = self.storage[6]
+            self.storage[6] = self.storage[5]
+            self.storage[5] = self.storage[4]
+            self.storage[4] = self.storage[3]
+            self.storage[3] = self.storage[2]
+            self.storage[2] = self.storage[1]
+            self.storage[1] = self.storage[0]
+            self.storage[0] = self.readdata
+
+            self.temp_dataset = self.filter_it.run(self.storage)
+            self.count += 1
+            
+        elif self.count == 3:
+            print("data measured")
+            self.mean_unstressed1 = sum(self.temp_dataset)/len(self.temp_dataset)
+            print("mean1 : ", self.mean_unstressed1)
+            self.count = 4
+            print("prepare calibratingleft stressed")
         # State guards
         # None: performed by the button press
         
@@ -68,9 +84,30 @@ class StateFunctions(object):
         # Entry action
         if self.state_object.is_new_state():
             print('Entered CALISTRESSEDLEFT')
-            self.clEmg.start()
-            self.temp_dataset = self.clEmg.datareceive()
+            self.count = 0
         # Action
+        if self.count < 10:
+            self.readdata = self.clEmg.read_emg() #read the analog pin
+
+            self.storage[9] = self.storage[8]
+            self.storage[8] = self.storage[7]
+            self.storage[7] = self.storage[6]
+            self.storage[6] = self.storage[5]
+            self.storage[5] = self.storage[4]
+            self.storage[4] = self.storage[3]
+            self.storage[3] = self.storage[2]
+            self.storage[2] = self.storage[1]
+            self.storage[1] = self.storage[0]
+            self.storage[0] = self.readdata
+
+            self.temp_dataset = self.filter_it.run(self.storage)
+            self.count += 1
+            
+        elif self.count == 10:
+            print("data measured")
+            self.mean_stressed1 = sum(self.temp_dataset)/len(self.temp_dataset)
+            print("mean1 : ", self.mean_stressed1)
+            self.count = 11
 
         # State guards
         # None: performed by the button press
@@ -81,9 +118,30 @@ class StateFunctions(object):
         # Entry action
             if self.state_object.is_new_state():
                 print('Entered CALIUNSTRESSEDRIGHT')
-                self.crEmg.start()
-                self.temp_dataset = self.crEmg.datareceive()
+            self.count = 0
         # Action
+        if self.count < 10:
+            self.readdata = self.crEmg.read_emg() #read the analog pin
+
+            self.storage[9] = self.storage[8]
+            self.storage[8] = self.storage[7]
+            self.storage[7] = self.storage[6]
+            self.storage[6] = self.storage[5]
+            self.storage[5] = self.storage[4]
+            self.storage[4] = self.storage[3]
+            self.storage[3] = self.storage[2]
+            self.storage[2] = self.storage[1]
+            self.storage[1] = self.storage[0]
+            self.storage[0] = self.readdata
+
+            self.temp_dataset = self.filter_it.run(self.storage)
+            self.count += 1
+            
+        elif self.count == 10:
+            print("data measured")
+            self.mean_stressed2 = sum(self.temp_dataset)/len(self.temp_dataset)
+            print("mean1 : ", self.mean_stressed2)
+            self.count = 11
 
         # State guards
         # None: performed by the button press
@@ -94,8 +152,6 @@ class StateFunctions(object):
         # Entry action
         if self.state_object.is_new_state():
                 print('Entered CALISTRESSEDRIGHT')
-                self.crEmg.start()
-                self.temp_dataset = self.crEmg.datareceive()
         # Action
 
         # State guards
@@ -109,8 +165,6 @@ class StateFunctions(object):
     # Entry action
         if self.state_object.is_new_state():
             print('Entered CALIUNSTRESSEDCALF')
-            self.ccEmg.start()
-            self.temp_dataset = self.ccEmg.datareceive()
     # Action
     
     # State guards
@@ -122,8 +176,6 @@ class StateFunctions(object):
         # Entry action
         if self.state_object.is_new_state():
                 print('Entered CALISTRESSEDCALF')
-                self.ccEmg.start()
-                self.temp_dataset = self.ccEmg.datareceive()
         # Action
 
         # State guards

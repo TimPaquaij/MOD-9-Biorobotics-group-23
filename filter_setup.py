@@ -52,7 +52,6 @@ class FilterSetup(object):
         return
     
     def run(self, data):
-        print("start filter")
         self.data=data
         self.mean_data = sum(self.data)/len(self.data)
 
@@ -67,7 +66,6 @@ class FilterSetup(object):
             abso = abs(num)
             self.Adata.append(abso)
         self.data=self.LowPassFilter.filter(self.sample_frequency, self.Adata)
-        print("eind filter")
         return(self.data)
 
     def meanandnormalize(self):
