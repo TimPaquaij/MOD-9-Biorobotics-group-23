@@ -20,7 +20,7 @@ class Running(object):
         encoder_period = 8400
         self.motor = motor
         self.Motor = Motor(motor_freq,encoder_period,motor)
-        self.PID = PID_pf(1 / motor_freq, 200, 50, 1.5)
+        self.PID = PID_pf(1 / motor_freq, 200, 5, 20)
         self.unwrapper = Unwrapper(8400)
         self.reference = 0
 

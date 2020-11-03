@@ -348,17 +348,19 @@ class StateFunctions(object):
             if self.running_all.trans.emg_states.click_right:
                 self.running_all.Servo.rest()
                 self.running_all.Servo.right()
+                self.running_all.trans.emg_states.click_right = False
             elif self.running_all.trans.emg_states.click_left:
                 self.running_all.Servo.rest()
                 self.running_all.Servo.left()
+                self.running_all.trans.emg_states.click_left = False
         
-        if self.count3 < 3:
+        if self.count3 < 2:
             self.count3 += 1
 
         else:
 
             # Action
-            if self.count < 20 :
+            if self.count < 40 :
             #Motor control
                 self.running_all.run_all()
                 self.count += 1
