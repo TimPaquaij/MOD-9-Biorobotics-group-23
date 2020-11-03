@@ -63,9 +63,10 @@ class StateFunctions(object):
         # Entry action
         if self.state_object.is_new_state():
             print('Entered CALIUNSTRESSEDLEFT')
+            self.calibrate_dataset = []
 
         # Action
-        if self.count2 < 10:
+        if self.count2 < 33:
             if self.count < 3:
                 self.readdata = self.clEmg.read_emg() #read the analog pin
 
@@ -79,21 +80,18 @@ class StateFunctions(object):
                 print("data measured")
                 self.temp_dataset =self.filter_it.run(self.storage)
 
-                self.calibrate_dataset = []
                 for num in self.temp_dataset:
                     self.calibrate_dataset.append(num)
                 self.count = 0
                 self.count2 += 1
-
-            
         
                     
-        elif self.count2 == 10:
+        elif self.count2 == 33:
             self.mean_unstressed1 = sum(self.calibrate_dataset)/len(self.calibrate_dataset)
             print("mean unstressed left : ", self.mean_unstressed1)
             self.count = 4
             print("prepare calibratingleft stressed")
-            self.count2 = 11
+            self.count2 = 34
         # State guards
         # None: performed by the button press
         
@@ -105,8 +103,10 @@ class StateFunctions(object):
             print('Entered CALISTRESSEDLEFT')
             self.count = 0
             self.count2 = 0
+            self.calibrate_dataset = []
+
         # Action
-        if self.count2 < 10:
+        if self.count2 < 33:
             if self.count < 3:
                 self.readdata = self.clEmg.read_emg() #read the analog pin
                 self.storage[2] = self.storage[1]
@@ -117,13 +117,12 @@ class StateFunctions(object):
             elif self.count == 3:
                 print("data measured")
                 self.temp_dataset =self.filter_it.run(self.storage)
-                self.calibrate_dataset = []
                 for num in self.temp_dataset:
                     self.calibrate_dataset.append(num)
                 self.count = 0
                 self.count2 += 1
     
-        elif self.count2 == 10:
+        elif self.count2 == 33:
             
             print("data measured")
             self.mean_stressed1 = sum(self.calibrate_dataset)/len(self.calibrate_dataset)
@@ -133,7 +132,7 @@ class StateFunctions(object):
             self.thresholdright = 0.8*(self.mean_stressed1-self.mean_unstressed1)+ self.mean_unstressed1
 
             self.count = 4
-            self.count2 =11
+            self.count2 =34
 
         # State guards
         # None: performed by the button press

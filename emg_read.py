@@ -1,16 +1,17 @@
 from machine import Pin, ADC
+from pin_definitions import Pins
 
 class EmgReader(object):
     def __init__(self,n): #n is the number of the emg reader
 
         if n == 1:
-            self.adc = ADC(Pin('A0')) #set analog pin to A0 and put the analog value on self.adc
+            self.adc = ADC(Pin(Pins.EMG_ANALOG_1)) #set analog pin to A0 and put the analog value on self.adc
         
         if n == 2:
-            self.adc = ADC(Pin('A1'))
+            self.adc = ADC(Pin(Pins.EMG_ANALOG_2))
         
         if n == 3:
-            self.adc = ADC(Pin('A2'))
+            self.adc = ADC(Pin(Pins.EMG_ANALOG_3))
         return
 
     def read_emg(self):

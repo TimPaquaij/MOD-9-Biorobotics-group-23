@@ -18,3 +18,7 @@ class Pins(object):
     MOTOR3_ENC_B = 'D23'
 
     SERVO_PWM = 'D63'
+
+    EMG_ANALOG_1 = 'A0'
+    EMG_ANALOG_2 = 'A1'
+    EMG_ANALOG_3 = 'A2'

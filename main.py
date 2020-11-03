@@ -7,7 +7,7 @@ from timer_definitions import Timers
 
 
 timer_number = Timers.RUN
-main_frequency = 700
+main_frequency = 400
 
 robot = Robot(timer_number, main_frequency)
 robot.start()

@@ -26,7 +26,7 @@ class FilterSetup(object):
         High-Pass filter
         """
         ha0 = 1.0
-        ha1 = -1.8696
+        ha1 = -1.8695
         ha2 = 0.8794
         hb0 = 0.9159
         hb1 = -1.8318
