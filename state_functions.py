@@ -6,6 +6,7 @@ from biquad_setup import Biquad_setup
 import utime
 from controling import RunningAll
 from states import States
+import ulab as np
 
 class StateFunctions(object):
 
@@ -63,6 +64,25 @@ class StateFunctions(object):
     def standstill(self):
         if self.state_object.is_new_state():
             print('Entered STANDSTILL')
+            self.count3 = 0
+            self.running_all.Motor1.reference = 0
+            self.running_all.Motor2.reference = 0
+            self.running_all.Motor3.reference = 0
+
+
+        if self.count3 < 2:
+            self.count3 += 1
+
+        else:
+            # Action
+            
+            #Motor control
+            self.running_all.run_all()
+            self.count += 1
+            # State guards
+        
+        
+        
 
     def caliunstressedleft(self):
         # Entry action
