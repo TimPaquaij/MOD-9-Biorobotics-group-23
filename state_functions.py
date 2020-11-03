@@ -54,7 +54,7 @@ class StateFunctions(object):
         #motor controll stuff
         self.running_all = RunningAll()
 
-        self.csamplesize = 80
+        self.csamplesize = 400
         self.rsamplesize = 80
 
 
@@ -345,20 +345,28 @@ class StateFunctions(object):
             self.running_all.trans.emg_states.calve = self.calf
 
             self.running_all.ref_all()
+            if self.running_all.trans.emg_states.click_right:
+                self.running_all.Servo.rest()
+                self.running_all.Servo.right()
+            elif self.running_all.trans.emg_states.click_left:
+                self.running_all.Servo.rest()
+                self.running_all.Servo.left()
         
-        if self.count3 < 4:
+        if self.count3 < 2:
             self.count3 += 1
 
         else:
 
             # Action
-            if self.count < 50 :
+            if self.count < 25 :
             #Motor control
                 self.running_all.run_all()
                 self.count += 1
 
             # State guards
             else:
+                #self.running_all.
+                self.running_all.Servo.rest()
                 self.state_object.set_state(States.READEMG)
             # None: performed by the button press
             self.count3 = 0

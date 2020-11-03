@@ -48,7 +48,9 @@ class NucleoButtonControl(object):
             elif self.state_object.state is States.CALISTRESSEDCALF:
                 self.state_object.set_state(States.READEMG)
             elif self.state_object.state is States.READEMG:
-                self.state_object.set_state(States.MOVE)
+                self.state_object.set_state(States.STANDSTILL)
+            elif self.state_object.state is States.MOVE:
+                self.state_object.set_state(States.STANDSTILL)
 
 
 
