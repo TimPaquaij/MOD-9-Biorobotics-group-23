@@ -78,22 +78,22 @@ class RunningAll(object):
         self.Motor2.ref(self.trans.angles.change[1])
         self.Motor1.ref(self.trans.angles.change[0])
         
-        if self.trans.emg_states.click_right:#new
-            self.Servo.rest()
-            self.Servo.right()
-            utime.sleep(0.1)
-            self.Servo.rest()
-            #rigth click function
-            return
+        #if self.trans.emg_states.click_right:#new
+        #    self.Servo.rest()
+        #    self.Servo.right()
+        #    utime.sleep(0.1)
+        #    self.Servo.rest()
+        #    #rigth click function
+        #    return
 
-        elif self.trans.emg_states.click_left:#new
-            self.Servo.rest()
-            self.Servo.left()
-            utime.sleep(0.1)
-            self.Servo.rest()
-            #left click function
-            return
-        
+        #elif self.trans.emg_states.click_left:#new
+        #    self.Servo.rest()
+        #    self.Servo.left()
+        #    utime.sleep(0.1)
+        #    self.Servo.rest()
+        #    #left click function
+        #    return
+        #
         return
 
 

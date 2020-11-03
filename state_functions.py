@@ -116,8 +116,7 @@ class StateFunctions(object):
             self.thresholdleft = (self.mean_stressed1+self.mean_unstressed1)/2
 
             print("threshold left: ", self.thresholdleft)
-            self.count = 4
-            self.count2 =301
+            self.count2 = 301
 
         # State guards
         # None: performed by the button press
@@ -146,7 +145,6 @@ class StateFunctions(object):
             self.mean_unstressed2 = sum(self.calibrate_dataset)/len(self.calibrate_dataset)
             print("mean unstressed right: ", self.mean_unstressed2)
             print("prepare calibrating right stressed")
-            self.count = 4
             self.count2 =301
         # Action
 
@@ -180,8 +178,7 @@ class StateFunctions(object):
             self.thresholdright = (self.mean_stressed2+self.mean_unstressed2)/2
 
             print("threshold right: ", self.thresholdright)
-            self.count = 4
-            self.count2 =301
+            self.count2 = 301
 
         return
     
@@ -208,8 +205,6 @@ class StateFunctions(object):
             self.mean_unstressed3 = sum(self.calibrate_dataset)/len(self.calibrate_dataset)
             print("mean unstressed right: ", self.mean_unstressed3)
             print("prepare calibrating calf stressed")
-
-            self.count = 4
             self.count2 =301
     
     # State guards
@@ -241,8 +236,7 @@ class StateFunctions(object):
             self.thresholdcalf = (self.mean_stressed3+self.mean_unstressed3)/2
 
             print("threshold calf: ", self.thresholdcalf)
-            self.count = 4
-            self.count2 =301
+            self.count2 = 301
 
         return
 
@@ -337,18 +331,32 @@ class StateFunctions(object):
         if self.state_object.is_new_state():
             print('Entered MOVE')
 
-        # Action
-        #EMG readout
-        self.running_all.trans.emg_states.bicep_left = self.biceps_left
-        self.running_all.trans.emg_states.bicep_right = self.biceps_right
-        self.running_all.trans.emg_states.calve = self.calf
+            self.count = 0
+            self.count3 = 0
 
-        #Motor control
-        self.running_all.run_all()
+            #EMG readout handover
+            self.running_all.trans.emg_states.bicep_left = self.biceps_left
+            self.running_all.trans.emg_states.bicep_right = self.biceps_right
+            self.running_all.trans.emg_states.calve = self.calf
 
-        # State guards
-        self.state_object.set_state(States.READEMG)
-        # None: performed by the button press
+            self.running_all.ref_all()
+        
+        if self.count3 < 8:
+            self.count3 += 1
+
+        else:
+
+            # Action
+            if self.count < 150 :
+            #Motor control
+                self.running_all.run_all()
+                self.count += 1
+
+            # State guards
+            else:
+                self.state_object.set_state(States.READEMG)
+            # None: performed by the button press
+            self.count3 = 0
         
         
         return
