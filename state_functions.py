@@ -1,7 +1,5 @@
 #import all the classes we need for the state functions
 
-<<<<<<< Updated upstream
-=======
 #necessary for emg
 from emg_read import EmgReader
 from filter_setup import FilterSetup
@@ -9,7 +7,6 @@ import utime
 from controling import RunningAll
 from states import States
 
->>>>>>> Stashed changes
 class StateFunctions(object):
 
     def __init__(self, state_object):#any other imputs needed??
@@ -17,9 +14,6 @@ class StateFunctions(object):
         self.state_object = state_object
 
         #initialize all the needed classes and variables
-<<<<<<< Updated upstream
-      
-=======
     
 
         #set up emg
@@ -59,7 +53,6 @@ class StateFunctions(object):
         self.running_all = RunningAll()
 
 
->>>>>>> Stashed changes
         return
 
     def standstill(self):
@@ -72,9 +65,6 @@ class StateFunctions(object):
             print('Entered CALIUNSTRESSEDLEFT')
 
         # Action
-<<<<<<< Updated upstream
-        
-=======
         if self.count2 < 10:
             if self.count < 3:
                 self.readdata = self.clEmg.read_emg() #read the analog pin
@@ -104,7 +94,6 @@ class StateFunctions(object):
             self.count = 4
             print("prepare calibratingleft stressed")
             self.count2 = 11
->>>>>>> Stashed changes
         # State guards
         # None: performed by the button press
         
@@ -114,9 +103,6 @@ class StateFunctions(object):
         # Entry action
         if self.state_object.is_new_state():
             print('Entered CALISTRESSEDLEFT')
-<<<<<<< Updated upstream
-        # Action
-=======
             self.count = 0
             self.count2 = 0
         # Action
@@ -148,7 +134,6 @@ class StateFunctions(object):
 
             self.count = 4
             self.count2 =11
->>>>>>> Stashed changes
 
         # State guards
         # None: performed by the button press
@@ -171,8 +156,6 @@ class StateFunctions(object):
         if self.state_object.is_new_state():
                 print('Entered CALISTRESSEDRIGHT')
         # Action
-<<<<<<< Updated upstream
-=======
         if self.count < 3:
             self.readdata = self.crEmg.read_emg() #read the analog pin
 
@@ -192,7 +175,6 @@ class StateFunctions(object):
             self.thresholdleft = 0.8*(self.mean_stressed2-self.mean_unstressed2)+ self.mean_unstressed2 
 
         
->>>>>>> Stashed changes
 
         # State guards
         # None: performed by the button press
@@ -205,9 +187,6 @@ class StateFunctions(object):
     # Entry action
         if self.state_object.is_new_state():
             print('Entered CALIUNSTRESSEDCALF')
-<<<<<<< Updated upstream
-    # Action
-=======
             self.count = 0
         # Action
         if self.count < 3:
@@ -226,7 +205,6 @@ class StateFunctions(object):
             print("mean unstressed right : ", self.mean_unstressed3)
             print("prepare calibrating calf stressed")
             self.count = 4
->>>>>>> Stashed changes
     
     # State guards
     # None: performed by the button press
@@ -248,13 +226,6 @@ class StateFunctions(object):
     # Entry action
         if self.state_object.is_new_state():
             print('Entered READEMG')
-<<<<<<< Updated upstream
-    # Action
-    
-    # State guards
-    # None: performed by the button press
-    
-=======
             self.readcount = 0
         # Action
         """
@@ -336,7 +307,6 @@ class StateFunctions(object):
         # State guards
         
         # None: performed by the button press
->>>>>>> Stashed changes
         return
     def move(self):
         # Entry action
