@@ -2,7 +2,7 @@
 
 #necessary for emg
 from emg_read import EmgReader
-from filter_setup import FilterSetup
+from biquad_setup import Biquad_setup
 import utime
 from controling import RunningAll
 from states import States
@@ -33,7 +33,7 @@ class StateFunctions(object):
 
         
         #set up filters
-        self.filter_it = FilterSetup()
+        self.filter_it = Biquad_setup()
 
         self.mean_unstressed1 = 0 #left
         self.mean_unstressed2 = 0 #right
@@ -71,7 +71,7 @@ class StateFunctions(object):
         if self.count2 < 100:
             if self.count < 3:
                 self.readdata = self.clEmg.read_emg() #read the analog pin
-                self.datatoplot.append(self.readdata)
+                #self.datatoplot.append(self.readdata)
 
                 self.storage[2] = self.storage[1]
                 self.storage[1] = self.storage[0]
@@ -80,11 +80,13 @@ class StateFunctions(object):
                 self.count += 1
             
             elif self.count == 3:
-                print("data measured")
-                self.temp_dataset =self.filter_it.run(self.storage)
+                #print("data measured")
+                #self.temp_dataset =self.filter_it.run(self.storage)
+                self.temp_dataset =self.filter_it.run(self.readdata)
 
-                for num in self.temp_dataset:
-                    self.calibrate_dataset.append(num)
+                """for num in self.temp_dataset:
+                    self.calibrate_dataset.append(num)"""
+                self.calibrate_dataset.append(self.temp_dataset)
                 self.count = 0
                 self.count2 += 1
         
@@ -94,7 +96,7 @@ class StateFunctions(object):
             print("mean unstressed left : ", self.mean_unstressed1)
             self.count = 4
             print("prepare calibratingleft stressed")
-            print("dataset1", self.datatoplot)
+            #print("dataset1", self.calibrate_dataset)
             self.count2 = 101
         # State guards
         # None: performed by the button press
@@ -119,23 +121,24 @@ class StateFunctions(object):
                 self.count += 1
             
             elif self.count == 3:
-                print("data measured")
-                self.temp_dataset =self.filter_it.run(self.storage)
-                for num in self.temp_dataset:
-                    self.calibrate_dataset.append(num)
+                #print("data measured")
+                self.temp_dataset =self.filter_it.run(self.readdata)
+                """for num in self.temp_dataset:
+                    self.calibrate_dataset.append(num)"""
+                self.calibrate_dataset.append(self.temp_dataset)
                 self.count = 0
                 self.count2 += 1
     
         elif self.count2 == 100:
             
-            print("data measured")
+            #print("data measured")
             self.mean_stressed1 = sum(self.calibrate_dataset)/len(self.calibrate_dataset)
-            print("mean stressed right: ", self.mean_stressed1)
+            print("mean stressed left: ", self.mean_stressed1)
             print("prepare calibrating right unstressed")
 
-            self.thresholdright = 0.8*(self.mean_stressed1-self.mean_unstressed1)+ self.mean_unstressed1
+            self.thresholdleft = (self.mean_stressed1+self.mean_unstressed1)/2
 
-            print("dataset2", self.calibrate_dataset)
+            print("threshold left: ", self.thresholdleft)
             self.count = 4
             self.count2 =101
 
@@ -146,8 +149,38 @@ class StateFunctions(object):
     
     def caliunstressedright(self):
         # Entry action
-            if self.state_object.is_new_state():
-                print('Entered CALIUNSTRESSEDRIGHT')
+        if self.state_object.is_new_state():
+            print('Entered CALISTRESSEDRIGHT')
+            self.count = 0
+            self.count2 = 0
+            self.calibrate_dataset = []
+
+        # Action
+        if self.count2 < 100:
+            if self.count < 3:
+                self.readdata = self.crEmg.read_emg() #read the analog pin
+                self.storage[2] = self.storage[1]
+                self.storage[1] = self.storage[0]
+                self.storage[0] = self.readdata
+                self.count += 1
+            
+            elif self.count == 3:
+                #print("data measured")
+                self.temp_dataset =self.filter_it.run(self.readdata)
+                """for num in self.temp_dataset:
+                    self.calibrate_dataset.append(num)"""
+                self.calibrate_dataset.append(self.temp_dataset)
+                self.count = 0
+                self.count2 += 1
+    
+        elif self.count2 == 100:
+            
+            #print("data measured")
+            self.mean_unstressed2 = sum(self.calibrate_dataset)/len(self.calibrate_dataset)
+            print("mean unstressed right: ", self.mean_unstressed2)
+            print("prepare calibrating right stressed")
+            self.count = 4
+            self.count2 =101
         # Action
 
         # State guards
@@ -158,30 +191,41 @@ class StateFunctions(object):
     def calistressedright(self):
         # Entry action
         if self.state_object.is_new_state():
-                print('Entered CALISTRESSEDRIGHT')
+            print('Entered CALISTRESSEDRIGHT')
+            self.count = 0
+            self.count2 = 0
+            self.calibrate_dataset = []
+
         # Action
-        if self.count < 3:
-            self.readdata = self.crEmg.read_emg() #read the analog pin
-
-            self.storage[2] = self.storage[1]
-            self.storage[1] = self.storage[0]
-            self.storage[0] = self.readdata
-
-            self.temp_dataset = self.filter_it.run(self.storage)
-            self.count += 1
+        if self.count2 < 100:
+            if self.count < 3:
+                self.readdata = self.crEmg.read_emg() #read the analog pin
+                self.storage[2] = self.storage[1]
+                self.storage[1] = self.storage[0]
+                self.storage[0] = self.readdata
+                self.count += 1
             
-        elif self.count == 3:
-            print("data measured")
-            self.mean_stressed2 = sum(self.temp_dataset)/len(self.temp_dataset)
-            print("mean stressed right : ", self.mean_stressed2)
+            elif self.count == 3:
+                #print("data measured")
+                self.temp_dataset =self.filter_it.run(self.readdata)
+                """for num in self.temp_dataset:
+                    self.calibrate_dataset.append(num)"""
+                self.calibrate_dataset.append(self.temp_dataset)
+                self.count = 0
+                self.count2 += 1
+    
+        elif self.count2 == 100:
+            
+            #print("data measured")
+            self.mean_stressed2 = sum(self.calibrate_dataset)/len(self.calibrate_dataset)
+            print("mean stressed right: ", self.mean_stressed2)
             print("prepare calibrating calf unstressed")
+
+            self.thresholdright = (self.mean_stressed2+self.mean_unstressed2)/2
+
+            print("threshold right: ", self.thresholdright)
             self.count = 4
-            self.thresholdleft = 0.8*(self.mean_stressed2-self.mean_unstressed2)+ self.mean_unstressed2 
-
-        
-
-        # State guards
-        # None: performed by the button press
+            self.count2 =101
 
         return
     
@@ -192,23 +236,36 @@ class StateFunctions(object):
         if self.state_object.is_new_state():
             print('Entered CALIUNSTRESSEDCALF')
             self.count = 0
+            self.count2 = 0
+            self.calibrate_dataset = []
+
         # Action
-        if self.count < 3:
-            self.readdata = self.ccEmg.read_emg() #read the analog pin
-
-            self.storage[2] = self.storage[1]
-            self.storage[1] = self.storage[0]
-            self.storage[0] = self.readdata
-
-            self.temp_dataset = self.filter_it.run(self.storage)
-            self.count += 1
+        if self.count2 < 100:
+            if self.count < 3:
+                self.readdata = self.ccEmg.read_emg() #read the analog pin
+                self.storage[2] = self.storage[1]
+                self.storage[1] = self.storage[0]
+                self.storage[0] = self.readdata
+                self.count += 1
             
-        elif self.count == 3:
-            print("data measured")
-            self.mean_unstressed3 = sum(self.temp_dataset)/len(self.temp_dataset)
-            print("mean unstressed right : ", self.mean_unstressed3)
+            elif self.count == 3:
+                #print("data measured")
+                self.temp_dataset =self.filter_it.run(self.readdata)
+                """for num in self.temp_dataset:
+                    self.calibrate_dataset.append(num)"""
+                self.calibrate_dataset.append(self.temp_dataset)
+                self.count = 0
+                self.count2 += 1
+    
+        elif self.count2 == 100:
+            
+            #print("data measured")
+            self.mean_unstressed3 = sum(self.calibrate_dataset)/len(self.calibrate_dataset)
+            print("mean unstressed right: ", self.mean_unstressed3)
             print("prepare calibrating calf stressed")
+
             self.count = 4
+            self.count2 =101
     
     # State guards
     # None: performed by the button press
@@ -216,13 +273,42 @@ class StateFunctions(object):
         return
 
     def calistressedcalf(self):
-        # Entry action
         if self.state_object.is_new_state():
-                print('Entered CALISTRESSEDCALF')
-        # Action
+            print('Entered CALISTRESSEDLEFT')
+            self.count = 0
+            self.count2 = 0
+            self.calibrate_dataset = []
 
-        # State guards
-        # None: performed by the button press
+        # Action
+        if self.count2 < 100:
+            if self.count < 3:
+                self.readdata = self.ccEmg.read_emg() #read the analog pin
+                self.storage[2] = self.storage[1]
+                self.storage[1] = self.storage[0]
+                self.storage[0] = self.readdata
+                self.count += 1
+            
+            elif self.count == 3:
+                #print("data measured")
+                self.temp_dataset =self.filter_it.run(self.readdata)
+                """for num in self.temp_dataset:
+                    self.calibrate_dataset.append(num)"""
+                self.calibrate_dataset.append(self.temp_dataset)
+                self.count = 0
+                self.count2 += 1
+    
+        elif self.count2 == 100:
+            
+            #print("data measured")
+            self.mean_stressed3 = sum(self.calibrate_dataset)/len(self.calibrate_dataset)
+            print("mean stressed calf: ", self.mean_stressed3)
+            print("calibrating done")
+
+            self.thresholdcalf = (self.mean_stressed3+self.mean_unstressed3)/2
+
+            print("threshold calf: ", self.thresholdcalf)
+            self.count = 4
+            self.count2 =101
 
         return
 
@@ -230,80 +316,104 @@ class StateFunctions(object):
     # Entry action
         if self.state_object.is_new_state():
             print('Entered READEMG')
-            self.readcount = 0
+            self.count2 = 0
+            self.read_dataset = []
+            self.count = 0
         # Action
-        """
-        read right
-        """
-        if self.readcount < 3:
-            self.readdata = self.crEmg.read_emg() #read the analog pin
 
-            self.storage[2] = self.storage[1]
-            self.storage[1] = self.storage[0]
-            self.storage[0] = self.readdata
 
-            self.temp_dataset = self.filter_it.run(self.storage)
-            self.readcount += 1
-
+        if self.count2 < 20:
+            if self.count < 3:
+                self.readdata = self.clEmg.read_emg() #read the analog pin
+                self.storage[2] = self.storage[1]
+                self.storage[1] = self.storage[0]
+                self.storage[0] = self.readdata
+                self.count += 1
             
-        elif self.readcount == 3:
-            #print("right data measured")
-            self.temp_mean_right = sum(self.temp_dataset)/len(self.temp_dataset)
-            #print("mean right : ", self.temp_mean_right)
-            self.readcount = 4
-
-
-        elif self.readcount < 7:
-
-            self.readdata = self.clEmg.read_emg() #read the analog pin
-
-            self.storage[2] = self.storage[1]
-            self.storage[1] = self.storage[0]
-            self.storage[0] = self.readdata
-
-            self.temp_dataset = self.filter_it.run(self.storage)
-            self.readcount += 1
-            
-        elif self.readcount == 7:
-            #print("left data measured")
-            self.temp_mean_left = sum(self.temp_dataset)/len(self.temp_dataset)
-            #print("mean left : ", self.temp_mean_left)
-            self.readcount = 8
-
-
-        elif self.readcount < 11:
-            self.readdata = self.crEmg.read_emg() #read the analog pin
-
-            self.storage[2] = self.storage[1]
-            self.storage[1] = self.storage[0]
-            self.storage[0] = self.readdata
-
-            self.temp_dataset = self.filter_it.run(self.storage)
-            self.readcount += 1
-            
-        elif self.readcount == 11:
-            #print("calf data measured")
-            self.temp_mean_calf = sum(self.temp_dataset)/len(self.temp_dataset)
-            #print("mean calf : ", self.temp_mean_calf)
-            self.readcount = 12
+            elif self.count == 3:
+                #print("data measuredr1")
+                self.temp_dataset =self.filter_it.run(self.readdata)
+                self.read_dataset.append(self.temp_dataset)
+                self.count = 0
+                self.count2 += 1
         
-        elif self.readcount == 12:
-            if self.temp_mean_right >= self.thresholdright:
+        elif self.count2 == 20:
+            
+            #print("data measuredr")
+            self.mean_left = sum(self.read_dataset)/len(self.read_dataset)
+            self.read_dataset = []
+
+            self.count = 0
+            self.count2 =21
+            
+
+
+        elif self.count2 < 40:
+            if self.count < 3:
+                self.readdata = self.crEmg.read_emg() #read the analog pin
+                self.storage[2] = self.storage[1]
+                self.storage[1] = self.storage[0]
+                self.storage[0] = self.readdata
+                self.count += 1
+            
+            elif self.count == 3:
+                #print("data measuredl1")
+                self.temp_dataset =self.filter_it.run(self.readdata)
+                self.read_dataset.append(self.temp_dataset)
+                self.count = 0
+                self.count2 += 1
+        
+        elif self.count2 == 40:
+            
+            #print("data measuredl")
+            self.mean_right = sum(self.read_dataset)/len(self.read_dataset)
+            self.read_dataset = []
+
+            self.count = 0
+            self.count2 =41
+
+
+
+        if self.count2 < 60:
+            if self.count < 3:
+                self.readdata = self.ccEmg.read_emg() #read the analog pin
+                self.storage[2] = self.storage[1]
+                self.storage[1] = self.storage[0]
+                self.storage[0] = self.readdata
+                self.count += 1
+            
+            elif self.count == 3:
+                #print("data measuredc1")
+                self.temp_dataset =self.filter_it.run(self.readdata)
+                self.read_dataset.append(self.temp_dataset)
+                self.count = 0
+                self.count2 += 1
+        
+        elif self.count2 == 60:
+            
+            #print("data measuredc")
+            self.mean_calf = sum(self.read_dataset)/len(self.read_dataset)
+            self.read_dataset = []
+
+            self.count = 0
+            self.count2 =61
+        
+        elif self.count2 == 61:
+            if self.mean_right >= self.thresholdright:
                 self.biceps_left = 1
             else:
                 self.biceps_left = 0
 
-            if self.temp_mean_left >= self.thresholdleft:
+            if self.mean_left >= self.thresholdleft:
                 self.biceps_right = 1
             else:
                 self.biceps_right = 0
 
-            if self.temp_mean_calf >= self.thresholdcalf:
+            if self.mean_calf >= self.thresholdcalf:
                 self.calf = 1
             else:
                 self.calf = 0
 
-            self.readcount = 13
             print("final code:", self.biceps_left, self.biceps_right, self.calf)
             self.state_object.set_state(States.MOVE)
             
