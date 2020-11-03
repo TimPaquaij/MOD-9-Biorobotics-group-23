@@ -29,6 +29,8 @@ class StateFunctions(object):
         self.readcount = 0
         self.count2 = 0
 
+        self.datatoplot = []
+
         
         #set up filters
         self.filter_it = FilterSetup()
@@ -66,9 +68,10 @@ class StateFunctions(object):
             self.calibrate_dataset = []
 
         # Action
-        if self.count2 < 33:
+        if self.count2 < 100:
             if self.count < 3:
                 self.readdata = self.clEmg.read_emg() #read the analog pin
+                self.datatoplot.append(self.readdata)
 
                 self.storage[2] = self.storage[1]
                 self.storage[1] = self.storage[0]
@@ -86,12 +89,13 @@ class StateFunctions(object):
                 self.count2 += 1
         
                     
-        elif self.count2 == 33:
+        elif self.count2 == 100:
             self.mean_unstressed1 = sum(self.calibrate_dataset)/len(self.calibrate_dataset)
             print("mean unstressed left : ", self.mean_unstressed1)
             self.count = 4
             print("prepare calibratingleft stressed")
-            self.count2 = 34
+            print("dataset1", self.datatoplot)
+            self.count2 = 101
         # State guards
         # None: performed by the button press
         
@@ -106,7 +110,7 @@ class StateFunctions(object):
             self.calibrate_dataset = []
 
         # Action
-        if self.count2 < 33:
+        if self.count2 < 100:
             if self.count < 3:
                 self.readdata = self.clEmg.read_emg() #read the analog pin
                 self.storage[2] = self.storage[1]
@@ -122,7 +126,7 @@ class StateFunctions(object):
                 self.count = 0
                 self.count2 += 1
     
-        elif self.count2 == 33:
+        elif self.count2 == 100:
             
             print("data measured")
             self.mean_stressed1 = sum(self.calibrate_dataset)/len(self.calibrate_dataset)
@@ -131,8 +135,9 @@ class StateFunctions(object):
 
             self.thresholdright = 0.8*(self.mean_stressed1-self.mean_unstressed1)+ self.mean_unstressed1
 
+            print("dataset2", self.calibrate_dataset)
             self.count = 4
-            self.count2 =34
+            self.count2 =101
 
         # State guards
         # None: performed by the button press

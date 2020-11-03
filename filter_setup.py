@@ -12,6 +12,7 @@ class FilterSetup(object):
         self.Hdata = []
         self.Absdata = []
         #self.Ydata = []
+        
 
         """
         Notch filter
