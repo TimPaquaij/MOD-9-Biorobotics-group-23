@@ -40,8 +40,8 @@ class Running(object):
         duty_cycle = abs(control_output) * 100 / (self.PID.p_gain*500)
         if duty_cycle > 100:
             duty_cycle = 100
-        if self.motor == 3:
-            print(self.motor,';',self.reference,';',measured,';',control_output,';',duty_cycle)
+        #if self.motor == 3:
+            #print(self.motor,';',self.reference,';',measured,';',control_output,';',duty_cycle)
         self.Motor.pulse_width_percent(duty_cycle)
         return
 
