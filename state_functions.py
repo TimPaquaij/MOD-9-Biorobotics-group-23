@@ -236,7 +236,7 @@ class StateFunctions(object):
             print("mean stressed calf: ", self.mean_stressed3)
             print("calibrating done")
 
-            self.thresholdcalf = 0.4*(self.mean_stressed3-self.mean_unstressed3)+self.mean_unstressed3
+            self.thresholdcalf = 0.5*(self.mean_stressed3-self.mean_unstressed3)+self.mean_unstressed3
 
             print("threshold calf: ", self.thresholdcalf)
             self.count2 = self.csamplesize+1
@@ -289,7 +289,7 @@ class StateFunctions(object):
             self.count2 =2*self.rsamplesize+1
 
 
-        if self.count2 < 3*self.rsamplesize:
+        elif self.count2 < 3*self.rsamplesize:
             self.readdata = self.ccEmg.read_emg() #read the analog pin
 
             self.temp_dataset =self.filter_it.run(self.readdata)
@@ -352,13 +352,13 @@ class StateFunctions(object):
                 self.running_all.Servo.rest()
                 self.running_all.Servo.left()
         
-        if self.count3 < 2:
+        if self.count3 < 3:
             self.count3 += 1
 
         else:
 
             # Action
-            if self.count < 25 :
+            if self.count < 20 :
             #Motor control
                 self.running_all.run_all()
                 self.count += 1
